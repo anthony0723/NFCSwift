@@ -53,7 +53,7 @@ open class VYNFCNDEFPayloadParser: NSObject, IVYNFCNDEFPayloadParser {
             }
         } else if (payload.typeNameFormat == NFCTypeNameFormat.media) {
             if (typeString == "text/x-vCard") {
-                return VYNFCNDEFPayloadParser.parseTextXVCardPayload(payloadBytes: payloadBytes, length: UInt(payloadBytesLength))
+                return VYNFCNDEFPayloadParser.parseTextXVCardPayload(payloadBytes: payloadBytes, length: payloadBytesLength)
             } else if typeString == "application/vnd.wfa.wsc" {
                 return VYNFCNDEFPayloadParser.parseWifiSimpleConfigPayload(payloadBytes: payloadBytes, length: payloadBytesLength)
             }
@@ -424,8 +424,8 @@ open class VYNFCNDEFPayloadParser: NSObject, IVYNFCNDEFPayloadParser {
     }
     
     // pragma mark - Parse Media Type
-    class func parseTextXVCardPayload(payloadBytes: [CUnsignedChar], length: UInt) -> Any? {
-        let text = String(cString: payloadBytes)//length
+    class func parseTextXVCardPayload(payloadBytes: [CUnsignedChar], length: Int) -> Any? {
+        let text = String(cString: subArray(array: payloadBytes, from: 0, length: length))
         if text.isEmpty {
             return nil
         }
