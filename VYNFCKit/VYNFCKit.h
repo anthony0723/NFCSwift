@@ -18,7 +18,4 @@ FOUNDATION_EXPORT double VYNFCKitVersionNumber;
 FOUNDATION_EXPORT const unsigned char VYNFCKitVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <VYNFCKit/PublicHeader.h>
-#import <VYNFCKit/VYNFCNDEFPayloadParser.h>
-#import <VYNFCKit/VYNFCNDEFPayloadTypes.h>
-#import <VYNFCKit/VYNFCNDEFMessageHeader.h>
 
