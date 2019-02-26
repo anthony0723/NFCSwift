@@ -36,36 +36,36 @@ class ViewController: UIViewController, NFCNDEFReaderSessionDelegate {
     func readerSession(_ session: NFCNDEFReaderSession, didDetectNDEFs messages: [NFCNDEFMessage]) {
         for message in messages {
             for payload in message.records {
-                guard let parsedPayload = VYNFCNDEFPayloadParser.parse(payload: payload) else {
+                guard let parsedPayload = NDEFPayloadParser.parse(payload: payload) else {
                     continue
                 }
                 var text = ""
                 var urlString = ""
-                if let parsedPayload = parsedPayload as? VYNFCNDEFTextPayload {
+                if let parsedPayload = parsedPayload as? NDEFTextPayload {
                     text = "[Text payload]\n"
                     text = String(format: "%@%@", text, parsedPayload.text)
-                } else if let parsedPayload = parsedPayload as? VYNFCNDEFURIPayload {
+                } else if let parsedPayload = parsedPayload as? NDEFURIPayload {
                     text = "[URI payload]\n"
                     text = String(format: "%@%@", text, parsedPayload.uriString)
                     urlString = parsedPayload.uriString
-                } else if let parsedPayload = parsedPayload as? VYNFCNDEFTextXVCardPayload {
+                } else if let parsedPayload = parsedPayload as? NDEFTextXVCardPayload {
                     text = "[TextXVCard payload]\n"
                     text = String(format: "%@%@", text, parsedPayload.text)
-                } else if let sp = parsedPayload as? VYNFCNDEFSmartPosterPayload {
+                } else if let sp = parsedPayload as? NDEFSmartPosterPayload {
                     text = "[SmartPoster payload]\n"
                     for textPayload in sp.payloadTexts {
-                        if let textPayload = textPayload as? VYNFCNDEFTextPayload {
+                        if let textPayload = textPayload as? NDEFTextPayload {
                             text = String(format: "%@%@\n", text, textPayload.text)
                         }
                     }
                     text = String(format: "%@%@", text, sp.payloadURI?.uriString ?? "")
                     urlString = sp.payloadURI?.uriString ?? ""
-                } else if let wifi = parsedPayload as? VYNFCNDEFWifiSimpleConfigPayload {
+                } else if let wifi = parsedPayload as? NDEFWifiSimpleConfigPayload {
                     for case let credential in wifi.credentials {
                         text = String(format: "%@SSID: %@\nPassword: %@\nMac Address: %@\nAuth Type: %@\nEncrypt Type: %@",
                                       text, credential.ssid, credential.networkKey, credential.macAddress,
-                                      VYNFCNDEFWifiSimpleConfigCredential.authTypeString(type: credential.authType!),
-                                      VYNFCNDEFWifiSimpleConfigCredential.encryptTypeString(type: credential.encryptType!)
+                                      NDEFWifiSimpleConfigCredential.authTypeString(type: credential.authType!),
+                                      NDEFWifiSimpleConfigCredential.encryptTypeString(type: credential.encryptType!)
                         )
                     }
                     if let version2 = wifi.version2 {

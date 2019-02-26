@@ -1,5 +1,5 @@
 #
-# Be sure to run `pod lib lint VYNFCKit.podspec' to ensure this is a
+# Be sure to run `pod lib lint NFCSwift.podspec' to ensure this is a
 # valid spec before submitting.
 #
 # Any lines starting with a # are optional, but their use is encouraged
@@ -8,8 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name             = 'NFCSwift'
-  s.version          = '0.1.0'
-  s.summary          = 'NFC Swift Kit for iOS'
+  s.version          = '1.0.0'
+  s.summary          = 'NFC Full Swift Library for iOS'
   s.homepage         = 'https://github.com/ahmedadouani/NFCSwift'
   s.license          = { :type => "MIT" }
   s.author           = { 'Ahmed ADOUANI' => 'adouaniahmed@gmail.com' }
@@ -18,8 +18,4 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = "8.0"
   s.source           = { :git => 'https://github.com/ahmedadouani/NFCSwift.git', :tag => s.version.to_s }
   s.source_files = 'NFCSwift/**/*.swift'
-
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
 end

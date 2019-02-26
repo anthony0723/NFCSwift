@@ -354,7 +354,7 @@
 				INFOPLIST_FILE = NFCSwift/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = vinceyuan.VYNFCKit;
+				PRODUCT_BUNDLE_IDENTIFIER = ahmedadouani.NFCSwift;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
@@ -373,7 +373,7 @@
 				INFOPLIST_FILE = NFCSwift/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = vinceyuan.VYNFCKit;
+				PRODUCT_BUNDLE_IDENTIFIER = ahmedadouani.NFCSwift;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
@@ -388,7 +388,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = NFCSwiftTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = vinceyuan.VYNFCKitTests;
+				PRODUCT_BUNDLE_IDENTIFIER = ahmedadouani.NFCSwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "NFCSwiftTests/NFCSwiftTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -404,7 +404,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = NFCSwiftTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = vinceyuan.VYNFCKitTests;
+				PRODUCT_BUNDLE_IDENTIFIER = ahmedadouani.NFCSwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "NFCSwiftTests/NFCSwiftTests-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;

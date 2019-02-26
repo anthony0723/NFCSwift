@@ -1,0 +1,16 @@
+PODS:
+  - NFCSwift (1.0.0)
+
+DEPENDENCIES:
+  - NFCSwift (from `../../`)
+
+EXTERNAL SOURCES:
+  NFCSwift:
+    :path: "../../"
+
+SPEC CHECKSUMS:
+  NFCSwift: 45820c9f40495a28752bce2b90cc9a575eea4453
+
+PODFILE CHECKSUM: f11b37ea9a669a432378cbf5fe3242ed2f85773e
+
+COCOAPODS: 1.7.0.beta.1
