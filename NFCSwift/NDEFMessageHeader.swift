@@ -1,15 +1,17 @@
 //
-//  VYNFCNDEFMessageHeader.swift
+//  VYNFCNDEFMessageHeader.m
 //  VYNFCKit
 //
-//  Created by Ahmed Adouani on 25/02/2019.
-//  Copyright © 2019 Vince Yuan. All rights reserved.
+//  Created by Vince Yuan on 7/14/17.
+//  Copyright © 2017 Vince Yuan. All rights reserved.
 //
-
+//  This source code is licensed under the MIT-style license found in the
+//  LICENSE file in the root directory of this source tree.
+//
 import Foundation
 import CoreNFC
 
-class VYNFCNDEFMessageHeader : NSObject {
+class NDEFMessageHeader : NSObject {
     var isMessageBegin: Bool?
     var isMessageEnd: Bool?
     var isChunkedUp: Bool?

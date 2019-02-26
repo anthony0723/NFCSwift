@@ -1,6 +1,6 @@
 //
-//  VYNFCKitTestsHelper.h
-//  VYNFCKitTests
+//  KitTestsHelper.h
+//  KitTests
 //
 //  Created by Vince Yuan on 7/9/17.
 //  Copyright © 2017 Vince Yuan. All rights reserved.
@@ -10,7 +10,7 @@
 
 @class NFCNDEFPayload;
 
-@interface VYNFCKitTestsHelper : NSObject
+@interface KitTestsHelper : NSObject
 
 + (NFCNDEFPayload *)correctTextPayloadEnglish;
 + (NFCNDEFPayload *)correctTextPayloadChinese;

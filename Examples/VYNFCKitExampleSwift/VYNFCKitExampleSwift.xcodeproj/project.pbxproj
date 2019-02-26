@@ -101,8 +101,7 @@
 				589F70591F51137D00E02B68 /* Sources */,
 				589F705A1F51137D00E02B68 /* Frameworks */,
 				589F705B1F51137D00E02B68 /* Resources */,
-				A97A4DDE3797A12E85957AE2 /* [CP] Embed Pods Frameworks */,
-				5D28E4057DC7B8FDAEB234CB /* [CP] Copy Pods Resources */,
+				E0B9B28715A5EFD10CDA3F2F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -166,37 +165,22 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		5D28E4057DC7B8FDAEB234CB /* [CP] Copy Pods Resources */ = {
+		E0B9B28715A5EFD10CDA3F2F /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-VYNFCKitExampleSwift/Pods-VYNFCKitExampleSwift-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A97A4DDE3797A12E85957AE2 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-VYNFCKitExampleSwift/Pods-VYNFCKitExampleSwift-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/VYNFCKit/VYNFCKit.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-VYNFCKitExampleSwift/Pods-VYNFCKitExampleSwift-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/NFCSwift/NFCSwift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/VYNFCKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NFCSwift.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-VYNFCKitExampleSwift/Pods-VYNFCKitExampleSwift-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VYNFCKitExampleSwift/Pods-VYNFCKitExampleSwift-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		EADD338FE54E7F1FB0C9E703 /* [CP] Check Pods Manifest.lock */ = {

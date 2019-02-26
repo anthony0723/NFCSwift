@@ -8,7 +8,7 @@
 
 import UIKit
 import CoreNFC
-import VYNFCKit
+import NFCSwift
 
 class ViewController: UIViewController, NFCNDEFReaderSessionDelegate {
 
@@ -36,7 +36,7 @@ class ViewController: UIViewController, NFCNDEFReaderSessionDelegate {
     func readerSession(_ session: NFCNDEFReaderSession, didDetectNDEFs messages: [NFCNDEFMessage]) {
         for message in messages {
             for payload in message.records {
-                guard let parsedPayload = VYNFCNDEFPayloadParser.parse(payload) else {
+                guard let parsedPayload = VYNFCNDEFPayloadParser.parse(payload: payload) else {
                     continue
                 }
                 var text = ""
@@ -58,14 +58,14 @@ class ViewController: UIViewController, NFCNDEFReaderSessionDelegate {
                             text = String(format: "%@%@\n", text, textPayload.text)
                         }
                     }
-                    text = String(format: "%@%@", text, sp.payloadURI.uriString)
-                    urlString = sp.payloadURI.uriString
+                    text = String(format: "%@%@", text, sp.payloadURI?.uriString ?? "")
+                    urlString = sp.payloadURI?.uriString ?? ""
                 } else if let wifi = parsedPayload as? VYNFCNDEFWifiSimpleConfigPayload {
-                    for case let credential as VYNFCNDEFWifiSimpleConfigCredential in wifi.credentials {
+                    for case let credential in wifi.credentials {
                         text = String(format: "%@SSID: %@\nPassword: %@\nMac Address: %@\nAuth Type: %@\nEncrypt Type: %@",
                                       text, credential.ssid, credential.networkKey, credential.macAddress,
-                                      VYNFCNDEFWifiSimpleConfigCredential.authTypeString(credential.authType),
-                                      VYNFCNDEFWifiSimpleConfigCredential.encryptTypeString(credential.encryptType)
+                                      VYNFCNDEFWifiSimpleConfigCredential.authTypeString(type: credential.authType!),
+                                      VYNFCNDEFWifiSimpleConfigCredential.encryptTypeString(type: credential.encryptType!)
                         )
                     }
                     if let version2 = wifi.version2 {

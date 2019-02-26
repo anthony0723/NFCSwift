@@ -2,7 +2,7 @@
 //  VYNFCNDEFPayloadParser.m
 //  VYNFCKit
 //
-//  Created by Vince Yuan on 7/8/17.
+//  Created by Vince Yuan on 7/14/17.
 //  Copyright © 2017 Vince Yuan. All rights reserved.
 //
 //  This source code is licensed under the MIT-style license found in the
@@ -14,10 +14,11 @@ import Foundation
 import CoreNFC
 
 @available(iOS, introduced: 11.0)//only on iPhone/iPad
-protocol IVYNFCNDEFPayloadParser: NSObjectProtocol {
+protocol INDEFPayloadParser: NSObjectProtocol {
 }
 
-open class VYNFCNDEFPayloadParser: NSObject, IVYNFCNDEFPayloadParser {
+@available(iOS, introduced: 11.0)//only on iPhone/iPad
+open class NDEFPayloadParser: NSObject, INDEFPayloadParser {
     
     class func uint16FromBigEndian(_ array: [UInt8], offset: Int) -> Int {
         let leftByte = Int(array[offset])
@@ -45,17 +46,17 @@ open class VYNFCNDEFPayloadParser: NSObject, IVYNFCNDEFPayloadParser {
         
         if (payload.typeNameFormat == NFCTypeNameFormat.nfcWellKnown) {
             if (typeString == "T") {
-                return VYNFCNDEFPayloadParser.parseTextPayload(payloadBytes: payloadBytes, length: payloadBytesLength)
+                return NDEFPayloadParser.parseTextPayload(payloadBytes: payloadBytes, length: payloadBytesLength)
             } else if (typeString == "U") {
-                return VYNFCNDEFPayloadParser.parseURIPayload(payloadBytes: payloadBytes, length: payloadBytesLength)
+                return NDEFPayloadParser.parseURIPayload(payloadBytes: payloadBytes, length: payloadBytesLength)
             } else if(typeString  == "Sp") {
-                return VYNFCNDEFPayloadParser.parseSmartPosterPayload(payloadBytes: payloadBytes, length: payloadBytesLength)
+                return NDEFPayloadParser.parseSmartPosterPayload(payloadBytes: payloadBytes, length: payloadBytesLength)
             }
         } else if (payload.typeNameFormat == NFCTypeNameFormat.media) {
             if (typeString == "text/x-vCard") {
-                return VYNFCNDEFPayloadParser.parseTextXVCardPayload(payloadBytes: payloadBytes, length: payloadBytesLength)
+                return NDEFPayloadParser.parseTextXVCardPayload(payloadBytes: payloadBytes, length: payloadBytesLength)
             } else if typeString == "application/vnd.wfa.wsc" {
-                return VYNFCNDEFPayloadParser.parseWifiSimpleConfigPayload(payloadBytes: payloadBytes, length: payloadBytesLength)
+                return NDEFPayloadParser.parseWifiSimpleConfigPayload(payloadBytes: payloadBytes, length: payloadBytesLength)
             }
         }
         return nil
@@ -111,7 +112,7 @@ open class VYNFCNDEFPayloadParser: NSObject, IVYNFCNDEFPayloadParser {
         if langCode.isEmpty || text.isEmpty {
             return nil
         }
-        let payload = VYNFCNDEFTextPayload(isUTF16: isUTF16, langCode: langCode, text: text)
+        let payload = NDEFTextPayload(isUTF16: isUTF16, langCode: langCode, text: text)
         return payload
     }
     
@@ -212,7 +213,7 @@ open class VYNFCNDEFPayloadParser: NSObject, IVYNFCNDEFPayloadParser {
         default: // 0x24-0xFF RFU Reserved for Future Use, Not Valid Inputs
             return nil
         }
-        let payload = VYNFCNDEFURIPayload(URIString: text)
+        let payload = NDEFURIPayload(URIString: text)
         return payload
     }
     
@@ -260,16 +261,16 @@ open class VYNFCNDEFPayloadParser: NSObject, IVYNFCNDEFPayloadParser {
     // |------------------------------|
     class func parseSmartPosterPayload(payloadBytes payLoadB: [CUnsignedChar], length ln: Int) -> Any? {
         var payloadTexts = [Any]()
-        var header: VYNFCNDEFMessageHeader? = nil
+        var header: NDEFMessageHeader? = nil
         
         var length = ln
         var payloadBytes = payLoadB
         
-        var payloadURI: IVYNFCNDEFURIPayload? = nil
+        var payloadURI: INDEFURIPayload? = nil
         
         while true {
             
-            header = VYNFCNDEFPayloadParser.parseMessageHeader(payloadBytes: payloadBytes, length: length)
+            header = NDEFPayloadParser.parseMessageHeader(payloadBytes: payloadBytes, length: length)
             guard let header = header else { break }
             
             guard let payloadOffset = header.payloadOffset,
@@ -281,16 +282,16 @@ open class VYNFCNDEFPayloadParser: NSObject, IVYNFCNDEFPayloadParser {
             
             if header.type == "U" {
                 // Parse URI payload.
-                let _parsedPayload = VYNFCNDEFPayloadParser.parseURIPayload(payloadBytes: payloadBytes, length: payloadLength)
+                let _parsedPayload = NDEFPayloadParser.parseURIPayload(payloadBytes: payloadBytes, length: payloadLength)
                 guard let parsedPayload = _parsedPayload else {
                     return nil
                 }
                 
-                payloadURI = (parsedPayload as! IVYNFCNDEFURIPayload)
+                payloadURI = (parsedPayload as! INDEFURIPayload)
                 
             } else if header.type == "T" {
                 // Parse text payload.
-                let _parsedPayload = VYNFCNDEFPayloadParser.parseTextPayload(payloadBytes: payloadBytes, length: Int(payloadLength))
+                let _parsedPayload = NDEFPayloadParser.parseTextPayload(payloadBytes: payloadBytes, length: Int(payloadLength))
                 guard let parsedPayload = _parsedPayload else {
                     return nil
                 }
@@ -311,7 +312,7 @@ open class VYNFCNDEFPayloadParser: NSObject, IVYNFCNDEFPayloadParser {
         if payloadTexts.count == 0 {
             return nil
         }
-        let smartPoster = VYNFCNDEFSmartPosterPayload(payloadURI: payloadURI, payloadTexts: payloadTexts)
+        let smartPoster = NDEFSmartPosterPayload(payloadURI: payloadURI, payloadTexts: payloadTexts)
         return smartPoster
     }
     
@@ -354,13 +355,13 @@ open class VYNFCNDEFPayloadParser: NSObject, IVYNFCNDEFPayloadParser {
     // TYPE : size =determined by TYPE_LENGTH : contains ASCII characters that determine the type of the message, used with the StatusByte.TNF section to determine the message type (ie a TNF of 0x01 for Well Known Type and a TYPE field of ‘T’ would tell us that the NDEF message payload is a Text record. A Type of “U” means URI, and a Type of “Sp” means SmartPoster).
     // ID : size = determined by ID_LENGTH field : holds unique identifier for the message. Usually used with message chunking to identify sections of data, or for custom implementations.
     // PAYLOAD : size = determined by PAYLOAD_LENGTH : contains the payload for the message. The payload is where the actual data transfer happens.
-    class func parseMessageHeader(payloadBytes: [CUnsignedChar], length: Int) -> VYNFCNDEFMessageHeader? {
+    class func parseMessageHeader(payloadBytes: [CUnsignedChar], length: Int) -> NDEFMessageHeader? {
         if (length == 0) {
             return nil
         }
         
         var index = 0
-        let header = VYNFCNDEFMessageHeader()
+        let header = NDEFMessageHeader()
         
         // Parse status byte.
         let statusByte = CUnsignedChar(payloadBytes[index])
@@ -429,7 +430,7 @@ open class VYNFCNDEFPayloadParser: NSObject, IVYNFCNDEFPayloadParser {
         if text.isEmpty {
             return nil
         }
-        let payload = VYNFCNDEFTextXVCardPayload(text: text)
+        let payload = NDEFTextXVCardPayload(text: text)
         return payload
     }
     
@@ -477,8 +478,8 @@ open class VYNFCNDEFPayloadParser: NSObject, IVYNFCNDEFPayloadParser {
         }
         
         var index = 0
-        var credentials = [IVYNFCNDEFWifiSimpleConfigCredential]()
-        var version2: IVYNFCNDEFWifiSimpleConfigVersion2?
+        var credentials = [NDEFWifiSimpleConfigCredential]()
+        var version2: INDEFWifiSimpleConfigVersion2?
         while index <= length - 2 {
             if (memcmp(UnsafePointer(payloadBytes)+index, VENDOR_EXT, 2) == 0) {
                 // Parse vendor extension
@@ -486,9 +487,9 @@ open class VYNFCNDEFPayloadParser: NSObject, IVYNFCNDEFPayloadParser {
                 if (index + 2 > length) {
                     return nil
                 }
-                let ext_length = VYNFCNDEFPayloadParser.uint16FromBigEndian(payloadBytes, offset:index)
+                let ext_length = NDEFPayloadParser.uint16FromBigEndian(payloadBytes, offset:index)
                 index += 2
-                version2 = VYNFCNDEFPayloadParser.parseWifiSimpleConfigVersion2(
+                version2 = NDEFPayloadParser.parseWifiSimpleConfigVersion2(
                     payloadBytes: subArray(
                         array: payloadBytes,
                         from: index,
@@ -500,10 +501,10 @@ open class VYNFCNDEFPayloadParser: NSObject, IVYNFCNDEFPayloadParser {
             } else if (memcmp(UnsafePointer(payloadBytes)+index, CREDENTIAL, 2) == 0) {
                 // Parse credential
                 index += 2
-                let credential_length = VYNFCNDEFPayloadParser.uint16FromBigEndian(payloadBytes, offset:index)
+                let credential_length = NDEFPayloadParser.uint16FromBigEndian(payloadBytes, offset:index)
                 index += 2
                 let credential_ =
-                    VYNFCNDEFPayloadParser.parseWifiSimpleConfigCredential(payloadBytes:subArray(array: payloadBytes, from: index, length: length-index), length: credential_length)
+                    NDEFPayloadParser.parseWifiSimpleConfigCredential(payloadBytes:subArray(array: payloadBytes, from: index, length: length-index), length: credential_length)
                 guard let credential = credential_ else {
                     return nil
                 }
@@ -515,12 +516,12 @@ open class VYNFCNDEFPayloadParser: NSObject, IVYNFCNDEFPayloadParser {
             }
         }
         
-        let payload = VYNFCNDEFWifiSimpleConfigPayload(version2: version2)
+        let payload = NDEFWifiSimpleConfigPayload(version2: version2)
         payload.credentials.append(contentsOf: credentials)
         return payload
     }
     
-    class func parseWifiSimpleConfigCredential(payloadBytes: [CUnsignedChar], length: Int) -> VYNFCNDEFWifiSimpleConfigCredential? {
+    class func parseWifiSimpleConfigCredential(payloadBytes: [CUnsignedChar], length: Int) -> NDEFWifiSimpleConfigCredential? {
         
         if (length < 2) {
             return nil
@@ -534,9 +535,9 @@ open class VYNFCNDEFPayloadParser: NSObject, IVYNFCNDEFPayloadParser {
         
         var networkKey: String? = nil
         
-        var authType: VYNFCNDEFWifiSimpleConfigAuthType? = nil
+        var authType: NDEFWifiSimpleConfigAuthType? = nil
         
-        var encryptType: VYNFCNDEFWifiSimpleConfigEncryptType? = nil
+        var encryptType: NDEFWifiSimpleConfigEncryptType? = nil
         
         
         var index = 0
@@ -544,7 +545,7 @@ open class VYNFCNDEFPayloadParser: NSObject, IVYNFCNDEFPayloadParser {
             if (memcmp(UnsafePointer(payloadBytes)+index, SSID, 2) == 0) {
                 // Parse SSID
                 index += 2
-                let sublength = VYNFCNDEFPayloadParser.uint16FromBigEndian(payloadBytes, offset:index)
+                let sublength = NDEFPayloadParser.uint16FromBigEndian(payloadBytes, offset:index)
                 index += 2
                 let text = String(cString:subArray(array: payloadBytes, from: index, length: sublength)) //length:sublength
                 if text.isEmpty {
@@ -573,7 +574,7 @@ open class VYNFCNDEFPayloadParser: NSObject, IVYNFCNDEFPayloadParser {
             } else if memcmp(UnsafePointer(payloadBytes)+index, NETWORK_KEY, 2) == 0 {
                 // Parse network key (password)
                 index += 2
-                let sublength = VYNFCNDEFPayloadParser.uint16FromBigEndian(payloadBytes, offset:index)
+                let sublength = NDEFPayloadParser.uint16FromBigEndian(payloadBytes, offset:index)
                 index += 2
                 let text = String(cString:subArray(array: payloadBytes, from: index, length: sublength)) //length:sublength
                 if text.isEmpty {
@@ -586,7 +587,7 @@ open class VYNFCNDEFPayloadParser: NSObject, IVYNFCNDEFPayloadParser {
                 // Parse authentication type
                 index += 2
                 index += 2 // Skip length
-                var type: VYNFCNDEFWifiSimpleConfigAuthType = .open
+                var type: NDEFWifiSimpleConfigAuthType = .open
                 if memcmp(UnsafePointer(payloadBytes)+index, AUTH_OPEN, 2) == 0 {
                     type = .open
                 } else if memcmp(UnsafePointer(payloadBytes)+index, AUTH_WPA_PERSONAL, 2) == 0 {
@@ -612,7 +613,7 @@ open class VYNFCNDEFPayloadParser: NSObject, IVYNFCNDEFPayloadParser {
                 // Parse encryption type
                 index += 2
                 index += 2 // Skip length
-                var type: VYNFCNDEFWifiSimpleConfigEncryptType = .none
+                var type: NDEFWifiSimpleConfigEncryptType = .none
                 if memcmp(UnsafePointer(payloadBytes)+index, ENCRYPT_NONE, 2) == 0 {
                     type = .none
                 } else if memcmp(UnsafePointer(payloadBytes)+index, ENCRYPT_WEP, 2) == 0 {
@@ -639,7 +640,7 @@ open class VYNFCNDEFPayloadParser: NSObject, IVYNFCNDEFPayloadParser {
         }
         
         if ssid != nil, macAddress != nil, networkKey != nil {
-            let credential = VYNFCNDEFWifiSimpleConfigCredential(ssid: ssid!, macAddress: macAddress!, networkIndex: networkIndex, networkKey: networkKey!, authType: authType, encryptType: encryptType)
+            let credential = NDEFWifiSimpleConfigCredential(ssid: ssid!, macAddress: macAddress!, networkIndex: networkIndex, networkKey: networkKey!, authType: authType, encryptType: encryptType)
             return credential
         } else {
             return nil
@@ -667,7 +668,7 @@ open class VYNFCNDEFPayloadParser: NSObject, IVYNFCNDEFPayloadParser {
     
     // Version2 value: 0x20 = version 2.0, 0x21 = version 2.1, etc. Shall be included in protocol version 2.0 and higher.
     // If Version2 does not exist, assume version is "1.0h".
-    class func parseWifiSimpleConfigVersion2(payloadBytes: [CUnsignedChar], length: Int) -> VYNFCNDEFWifiSimpleConfigVersion2? {
+    class func parseWifiSimpleConfigVersion2(payloadBytes: [CUnsignedChar], length: Int) -> NDEFWifiSimpleConfigVersion2? {
         var index = 0
         if (UInt(index) + 3 > length) {
             return nil
@@ -701,7 +702,7 @@ open class VYNFCNDEFPayloadParser: NSObject, IVYNFCNDEFPayloadParser {
             }
         }
         if version != nil {
-            let version2 = VYNFCNDEFWifiSimpleConfigVersion2(version: version!)
+            let version2 = NDEFWifiSimpleConfigVersion2(version: version!)
             return version2
         } else {
             return nil

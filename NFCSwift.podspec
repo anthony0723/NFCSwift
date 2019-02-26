@@ -7,17 +7,17 @@
 #
 
 Pod::Spec.new do |s|
-  s.name             = 'VYNFCKit'
-  s.version          = '0.3.2'
-  s.summary          = 'NFC Kit for iOS'
-  s.homepage         = 'https://github.com/VinceYuan/VYNFCKit'
+  s.name             = 'NFCSwift'
+  s.version          = '0.1.0'
+  s.summary          = 'NFC Swift Kit for iOS'
+  s.homepage         = 'https://github.com/ahmedadouani/NFCSwift'
   s.license          = { :type => "MIT" }
-  s.author           = { 'Vince Yuan' => 'vince.yuan@gmail.com' }
+  s.author           = { 'Ahmed ADOUANI' => 'adouaniahmed@gmail.com' }
 
   s.requires_arc = true
   s.ios.deployment_target = "8.0"
-  s.source           = { :git => 'https://github.com/VinceYuan/VYNFCKit.git', :tag => s.version.to_s }
-  s.source_files = 'VYNFCKit/**/*.h', 'VYNFCKit/**/*.m'
+  s.source           = { :git => 'https://github.com/ahmedadouani/NFCSwift.git', :tag => s.version.to_s }
+  s.source_files = 'NFCSwift/**/*.swift'
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'

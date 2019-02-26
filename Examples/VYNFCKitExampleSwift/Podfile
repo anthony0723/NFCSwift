@@ -6,6 +6,6 @@ target 'VYNFCKitExampleSwift' do
   use_frameworks!
 
   # Pods for VYNFCKitExampleSwift
-  pod 'VYNFCKit', :path => '../../'
+  pod 'NFCSwift', :path => '../../'
 
 end
