@@ -10,6 +10,16 @@
 #import <CoreNFC/CoreNFC.h>
 
 @implementation KitTestsHelper
+   
++ (NFCNDEFPayload *)correctTextPayloadUTF16 {
+    NFCNDEFPayload *payload = [NFCNDEFPayload new];
+    payload.typeNameFormat = NFCTypeNameFormatNFCWellKnown;
+    payload.type = [@"T" dataUsingEncoding:NSUTF8StringEncoding];
+    payload.identifier = [@"" dataUsingEncoding:NSUTF8StringEncoding];
+    payload.payload = [NSData dataWithBytes:"\x82\x65\x6e\xff\xfe\x4d\x00\x65\x00\x73\x00\x73\x00\x61\x00\x67\x00\x65\x00" length: 19];
+    
+    return payload;
+}
     
 + (NFCNDEFPayload *)correctTextPayloadEnglish {
     NFCNDEFPayload *payload = [NFCNDEFPayload new];
@@ -19,7 +29,7 @@
     payload.payload = [@"\2enThis is text." dataUsingEncoding:NSUTF8StringEncoding];
     return payload;
 }
-       
+    
 + (NFCNDEFPayload *)correctTextPayloadChinese {
     NFCNDEFPayload *payload = [NFCNDEFPayload new];
     payload.typeNameFormat = NFCTypeNameFormatNFCWellKnown;

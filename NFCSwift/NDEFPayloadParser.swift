@@ -17,6 +17,13 @@ import CoreNFC
 protocol INDEFPayloadParser: NSObjectProtocol {
 }
 
+extension String {
+    init(bytesArray: [UInt8], encoding: String.Encoding = .utf8) {
+        let dataUtf = NSData(bytes: bytesArray, length: bytesArray.count)
+        self = String(data: dataUtf as Data, encoding: encoding) ?? ""
+    }
+}
+
 @available(iOS, introduced: 11.0)//only on iPhone/iPad
 open class NDEFPayloadParser: NSObject, INDEFPayloadParser {
     
@@ -94,19 +101,24 @@ open class NDEFPayloadParser: NSObject, INDEFPayloadParser {
             return nil
         }
         
-        let lengthInt = Int(length)
-        let codeLengthInt = Int(codeLength)
-        
         // Get lang code and text.
-        let subArr = subArray(array:payloadBytes, from:1, length: codeLengthInt)//length - 1
-        let langCode = String(cString: subArr)
+        let subArr = subArray(array:payloadBytes, from:1, length: codeLength)
+        let dataLangCode = NSData(bytes: subArr as [UInt8], length: codeLength)
+        let langCode = String(data: dataLangCode as Data, encoding: String.Encoding.utf8)!
         
         
         let subArrayFortext = subArray(array:payloadBytes,
-                                       from:1+codeLengthInt,
-                                       length: lengthInt-1-codeLengthInt) //length - 1 - codeLength
+                                       from:1+codeLength,
+                                       length: length-1-codeLength)
         
-        let text = String(cString: subArrayFortext)
+        let text: String
+        
+        if !isUTF16 {
+            text = String(bytesArray: subArrayFortext)
+        } else {
+            text = String(bytesArray: subArrayFortext, encoding: String.Encoding.utf16)
+        }
+        
         //encoding: (!isUTF16)?NSUTF8StringEncoding:NSUTF16StringEncoding]
         
         if langCode.isEmpty || text.isEmpty {
@@ -129,7 +141,7 @@ open class NDEFPayloadParser: NSObject, INDEFPayloadParser {
         
         // Get ID code and original text.
         let code = payloadBytes[0] as CUnsignedChar
-        let originalText = String(cString: subArray(array:payloadBytes, from: 1, length: length - 1))//length - 1
+        let originalText = String(bytesArray: subArray(array:payloadBytes, from: 1, length: length - 1))//length - 1
         
         if originalText.isEmpty {
             return nil
@@ -405,7 +417,7 @@ open class NDEFPayloadParser: NSObject, INDEFPayloadParser {
         if (index + Int(typeLength) > length) {
             return nil
         }
-        header.type = String(cString: subArray(array: payloadBytes, from: index, length: Int(typeLength)))//typeLength
+        header.type = String(bytesArray: subArray(array: payloadBytes, from: index, length: Int(typeLength)))//typeLength
         if header.type == nil {
             return nil
         }
@@ -426,7 +438,7 @@ open class NDEFPayloadParser: NSObject, INDEFPayloadParser {
     
     // pragma mark - Parse Media Type
     class func parseTextXVCardPayload(payloadBytes: [CUnsignedChar], length: Int) -> Any? {
-        let text = String(cString: subArray(array: payloadBytes, from: 0, length: length))
+        let text = String(bytesArray: subArray(array: payloadBytes, from: 0, length: length))
         if text.isEmpty {
             return nil
         }
@@ -547,7 +559,7 @@ open class NDEFPayloadParser: NSObject, INDEFPayloadParser {
                 index += 2
                 let sublength = NDEFPayloadParser.uint16FromBigEndian(payloadBytes, offset:index)
                 index += 2
-                let text = String(cString:subArray(array: payloadBytes, from: index, length: sublength)) //length:sublength
+                let text = String(bytesArray:subArray(array: payloadBytes, from: index, length: sublength)) //length:sublength
                 if text.isEmpty {
                     return nil
                 }
@@ -576,7 +588,7 @@ open class NDEFPayloadParser: NSObject, INDEFPayloadParser {
                 index += 2
                 let sublength = NDEFPayloadParser.uint16FromBigEndian(payloadBytes, offset:index)
                 index += 2
-                let text = String(cString:subArray(array: payloadBytes, from: index, length: sublength)) //length:sublength
+                let text = String(bytesArray:subArray(array: payloadBytes, from: index, length: sublength)) //length:sublength
                 if text.isEmpty {
                     return nil
                 }
@@ -650,8 +662,7 @@ open class NDEFPayloadParser: NSObject, INDEFPayloadParser {
     
     class func subArray(array: [CUnsignedChar], from: Int, length: Int) -> [CUnsignedChar] {
         if length > 0, array.count-1 >= from+length-1 {
-            var subArray = Array(array[from...from+length-1]) as [CUnsignedChar]
-            subArray.append(0)
+            let subArray = Array(array[from...from+length-1]) as [CUnsignedChar]
             return subArray
         }
         return [0]

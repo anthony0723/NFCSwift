@@ -12,6 +12,7 @@
 
 @interface KitTestsHelper : NSObject
 
++ (NFCNDEFPayload *)correctTextPayloadUTF16;
 + (NFCNDEFPayload *)correctTextPayloadEnglish;
 + (NFCNDEFPayload *)correctTextPayloadChinese;
 + (NFCNDEFPayload *)correctURIPayload;
